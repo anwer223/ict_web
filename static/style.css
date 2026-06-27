@@ -1,0 +1,38 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter', -apple-system, sans-serif; background:#0a0a12; color:#e8e8ed; height:100vh; overflow:hidden; }
+#app { display:flex; height:100vh; width:100vw; }
+#scene-container { flex:1; position:relative; background:#0a0a12; overflow:hidden; }
+#three-canvas { width:100%; height:100%; display:block; }
+#fps-counter { position:absolute; top:12px; right:12px; background:rgba(0,0,0,0.6); padding:4px 12px; border-radius:12px; font-size:11px; color:#88ff88; font-family:monospace; backdrop-filter:blur(4px); border:1px solid rgba(255,255,255,0.05); pointer-events:none; z-index:50; }
+#overlay-controls { position:absolute; bottom:24px; left:50%; transform:translateX(-50%); display:flex; gap:12px; background:rgba(20,20,30,0.85); backdrop-filter:blur(12px); padding:10px 18px; border-radius:48px; border:1px solid rgba(255,255,255,0.08); z-index:50; }
+#overlay-controls button { background:transparent; border:1px solid rgba(255,255,255,0.2); color:#e8e8ed; padding:8px 20px; border-radius:30px; font-size:13px; font-weight:500; cursor:pointer; transition:all 0.2s; font-family:inherit; }
+#overlay-controls button:hover { background:rgba(255,255,255,0.08); border-color:#ffaa55; }
+#overlay-controls .primary { border-color:#ffaa55; color:#ffaa55; }
+#overlay-controls .primary:hover { background:#ffaa55; color:#0a0a12; }
+#panel { width:380px; min-width:300px; background:#12121e; border-left:1px solid #2a2a3a; display:flex; flex-direction:column; padding:20px 18px; gap:12px; overflow-y:auto; }
+.panel-header { display:flex; align-items:center; gap:10px; }
+.logo { font-size:22px; font-weight:700; letter-spacing:1px; color:#fff; }
+.badge { font-size:10px; background:#ffaa55; color:#0a0a12; padding:2px 10px; border-radius:20px; font-weight:600; }
+.status-row { display:flex; justify-content:space-between; background:#1a1a2a; padding:10px 14px; border-radius:14px; font-size:12px; }
+.status-row .label { color:#8888aa; }
+.status-row .value { font-weight:600; font-size:16px; margin-top:2px; }
+.voltage-wrap { background:#1a1a2a; border-radius:10px; padding:12px 14px; }
+.voltage-wrap .label { font-size:12px; color:#8888aa; margin-bottom:6px; display:block; }
+.bar { height:6px; background:#2a2a3e; border-radius:4px; overflow:hidden; }
+#voltageFill { height:100%; width:0%; background:#ffaa55; border-radius:4px; transition:width 0.2s; }
+#probeGrid { display:grid; grid-template-columns:repeat(5,1fr); gap:6px; }
+.probe-card { background:#1a1a2a; border-radius:10px; padding:8px 4px; text-align:center; border-top:2px solid #ffaa55; }
+.probe-card .pname { font-size:10px; color:#8888aa; display:block; }
+.probe-card .pvolt { font-size:16px; font-weight:600; color:#ffaa55; display:block; }
+#chatContainer { flex:1; display:flex; flex-direction:column; min-height:0; border-top:1px solid #2a2a3a; padding-top:12px; }
+.chat-header { font-size:12px; font-weight:600; color:#8888aa; margin-bottom:8px; }
+#chatMessages { flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px; margin-bottom:10px; max-height:180px; font-size:13px; }
+#chatMessages .user { background:#1a1a2e; align-self:flex-end; padding:8px 12px; border-radius:12px; border-bottom-right-radius:4px; max-width:85%; white-space:pre-line; }
+#chatMessages .bot { background:#2a2a3e; align-self:flex-start; padding:8px 12px; border-radius:12px; border-bottom-left-radius:4px; color:#d0d0e0; max-width:85%; white-space:pre-line; }
+#chatInputRow { display:flex; gap:8px; }
+#chatInputRow input { flex:1; background:#1a1a2a; border:1px solid #2a2a3a; border-radius:30px; padding:10px 16px; color:#e8e8ed; font-family:inherit; font-size:13px; outline:none; }
+#chatInputRow input:focus { border-color:#ffaa55; }
+#chatInputRow button { background:#ffaa55; border:none; border-radius:30px; padding:0 18px; font-weight:600; color:#0a0a12; cursor:pointer; }
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-thumb { background:#3a3a4e; border-radius:8px; }
+@media (max-width:820px) { #app { flex-direction:column; } #panel { width:100%; min-width:unset; height:45vh; border-left:none; border-top:1px solid #2a2a3a; } #scene-container { height:55vh; } }
