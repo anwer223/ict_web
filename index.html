@@ -183,6 +183,17 @@
         .team-member {
             text-align: center;
             flex: 0 0 140px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.7s ease forwards;
+        }
+
+        .team-member:nth-child(1) { animation-delay: 0.1s; }
+        .team-member:nth-child(2) { animation-delay: 0.2s; }
+        .team-member:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .team-member .avatar {
@@ -196,7 +207,13 @@
             justify-content: center;
             overflow: hidden;
             border: 2px solid #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .team-member .avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
         .team-member .avatar img {
@@ -225,8 +242,9 @@
             justify-content: center;
             margin-top: 20px;
         }
+        .supervisors .team-member { animation-delay: 0.4s; }
 
-        /* ─── Timeline with Gallery ─── */
+        /* ─── Timeline with embedded photos ─── */
         .timeline-item {
             display: flex;
             gap: 30px;
@@ -237,12 +255,11 @@
             border: 1px solid #e5e5e7;
             transition: box-shadow 0.2s;
             align-items: flex-start;
+            flex-wrap: wrap;
         }
-
         .timeline-item:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
         }
-
         .timeline-icon {
             flex: 0 0 50px;
             font-size: 24px;
@@ -251,11 +268,9 @@
             font-weight: 600;
             color: #007aff;
         }
-
         .timeline-content {
-            flex: 1;
+            flex: 2 1 400px;
         }
-
         .timeline-content .badge {
             display: inline-block;
             font-size: 12px;
@@ -266,61 +281,123 @@
             border-radius: 20px;
             margin-bottom: 6px;
         }
-
         .timeline-content h3 {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 4px;
             color: #1d1d1f;
         }
-
         .timeline-content .date {
             font-size: 13px;
             color: #8e8e93;
             margin-bottom: 8px;
         }
-
         .timeline-content p {
             color: #3a3a3c;
             font-size: 15px;
         }
-
         .timeline-content ul {
             margin: 10px 0 0 20px;
             color: #3a3a3c;
             font-size: 15px;
         }
+        .timeline-content ul li { margin-bottom: 4px; }
 
-        .timeline-content ul li {
-            margin-bottom: 4px;
-        }
-
+        /* embedded photo in timeline — BIG & WIDE */
         .timeline-photo {
-            flex: 0 0 180px;
+            flex: 0 0 320px;
+            max-width: 420px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #e5e5e7;
+            background: #f5f5f7;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            transition: transform 0.2s;
+            cursor: pointer;
         }
-
+        .timeline-photo:hover {
+            transform: scale(1.02);
+        }
         .timeline-photo img {
             width: 100%;
-            border-radius: 12px;
-            aspect-ratio: 4 / 3;
+            height: auto;
+            display: block;
             object-fit: cover;
-            background: #e5e5e7;
-            border: 1px solid #e5e5e7;
+            aspect-ratio: 4 / 3;
+        }
+        .timeline-photo .photo-caption {
+            font-size: 12px;
+            color: #6e6e73;
+            text-align: center;
+            padding: 8px 4px;
+            background: #fff;
+            font-weight: 500;
+            border-top: 1px solid #f0f0f2;
         }
 
-        @media (max-width: 700px) {
-            .timeline-item {
-                flex-direction: column;
-                gap: 16px;
-                padding: 20px;
-            }
-            .timeline-photo {
-                flex: 0 0 auto;
-                width: 100%;
-            }
-            .timeline-photo img {
-                aspect-ratio: 16 / 9;
-            }
+        /* full team photo row — EXTRA BIG & WIDE */
+        .team-photo-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 14px;
+            width: 100%;
+        }
+        .team-photo-row .timeline-photo {
+            flex: 0 0 600px;
+            max-width: 780px;
+            width: 100%;
+        }
+        .team-photo-row .timeline-photo img {
+            aspect-ratio: 16 / 9;
+            width: 100%;
+            height: auto;
+        }
+
+        /* ─── LIGHTBOX ─── */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            inset: 0;
+            background: rgba(0,0,0,0.88);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            cursor: pointer;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 92vw;
+            max-height: 88vh;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+            object-fit: contain;
+            background: #fff;
+            padding: 6px;
+            transform: scale(0.95);
+            transition: transform 0.25s ease;
+        }
+        .lightbox.active img {
+            transform: scale(1);
+        }
+        .lightbox .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            font-size: 40px;
+            color: #fff;
+            font-weight: 300;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+            cursor: pointer;
+        }
+        .lightbox .close-btn:hover {
+            opacity: 1;
         }
 
         /* ─── Project Links ─── */
@@ -329,14 +406,12 @@
             background: #f5f5f7;
             border-bottom: 1px solid #e5e5e7;
         }
-
         .project-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 30px;
             margin-top: 20px;
         }
-
         .project-card {
             background: #ffffff;
             border-radius: 20px;
@@ -347,12 +422,10 @@
             color: inherit;
             display: block;
         }
-
         .project-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.04);
         }
-
         .project-card .thumb {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -362,24 +435,20 @@
             overflow: hidden;
             border: 1px solid #e5e5e7;
         }
-
         .project-card .thumb img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .project-card h3 {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 6px;
         }
-
         .project-card p {
             font-size: 14px;
             color: #6e6e73;
         }
-
         .project-card .link-icon {
             display: inline-block;
             margin-top: 12px;
@@ -396,28 +465,18 @@
             font-size: 14px;
             color: #8e8e93;
         }
-
         .footer .logo-small {
             font-weight: 700;
             letter-spacing: 1px;
             color: #1d1d1f;
         }
+        .footer .logo-small span { color: #007aff; }
 
-        .footer .logo-small span {
-            color: #007aff;
-        }
-
+        /* ─── Responsive ─── */
         @media (max-width: 700px) {
-            .hero h1 {
-                font-size: 30px;
-            }
-            .team-member {
-                flex: 0 0 120px;
-            }
-            .team-member .avatar {
-                width: 80px;
-                height: 80px;
-            }
+            .hero h1 { font-size: 30px; }
+            .team-member { flex: 0 0 120px; }
+            .team-member .avatar { width: 80px; height: 80px; }
             .navbar .container {
                 flex-direction: column;
                 align-items: center;
@@ -430,265 +489,297 @@
                 justify-content: center;
                 text-align: center;
             }
-            .project-cards {
-                grid-template-columns: 1fr;
-            }
+            .project-cards { grid-template-columns: 1fr; }
+            .timeline-item { flex-direction: column; gap: 16px; }
+            .timeline-photo { flex: 1 1 100% !important; max-width: 100% !important; }
+            .team-photo-row .timeline-photo { flex: 1 1 100% !important; max-width: 100% !important; }
+            .lightbox img { max-width: 95vw; max-height: 70vh; }
         }
     </style>
 </head>
 <body>
 
-    <!-- ─── NAVIGATION ─── -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="left">
-                <div class="logo-img">
-                    <img src="ax.jpg" alt="School Logo">
-                </div>
-                <div class="school-name">
-                    National Higher School of Autonomous Systems
-                    <span>2026</span>
-                </div>
+<!-- ─── NAVIGATION ─── -->
+<nav class="navbar">
+    <div class="container">
+        <div class="left">
+            <div class="logo-img"><img src="ax.jpg" alt="School Logo"></div>
+            <div class="school-name">National Higher School of Autonomous Systems</div>
+        </div>
+        <div class="center">Autonomous Remote <span>Experiments</span></div>
+        <div class="right">
+            <a href="#team">Team</a>
+            <a href="#journey">Our Journey</a>
+            <a href="#projects">3D Work</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<header class="hero">
+    <div class="container">
+        <h1>Our Journey</h1>
+        <p>From brainstorming to the implementation phase</p>
+        <div class="sub">AESE Team · 2026</div>
+    </div>
+</header>
+
+<!-- ─── TEAM ─── -->
+<section id="team">
+    <div class="container">
+        <h2 class="section-title">Our Team</h2>
+        <p class="section-sub">The people behind the project</p>
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="avatar"><img src="s.jpg" alt="Allali Siradj"></div>
+                <div class="name">Allali Siradj</div>
             </div>
-            <div class="center">Autonomous Remote <span>Experiments</span></div>
-            <div class="right">
-                <a href="#team">Team</a>
-                <a href="#journey">Our Journey</a>
-                <a href="#projects">3D Work</a>
+            <div class="team-member">
+                <div class="avatar"><img src="t.jpg" alt="Anwer Tobbeche"></div>
+                <div class="name">Anwer Tobbeche</div>
+            </div>
+            <div class="team-member">
+                <div class="avatar"><img src="https://ui-avatars.com/api/?name=Asmaa+Zidane&background=007aff&color=fff&size=100&font-size=0.5" alt="Asmaa Zidane"></div>
+                <div class="name">Asmaa Zidane</div>
             </div>
         </div>
-    </nav>
-
-    <!-- ─── HERO ─── -->
-    <header class="hero">
-        <div class="container">
-            <h1>Our Journey</h1>
-            <p>From brainstorming to the implementation phase</p>
-            <div class="sub">AESE Team · 2026</div>
-        </div>
-    </header>
-
-    <!-- ─── TEAM ─── -->
-    <section id="team">
-        <div class="container">
-            <h2 class="section-title">Our Team</h2>
-            <p class="section-sub">The people behind the project</p>
-
-            <div class="team-grid">
-                <div class="team-member">
-                    <div class="avatar"><img src="s.jpg" alt="Allali Siradj"></div>
-                    <div class="name">Allali Siradj</div>
-                </div>
-
-                <div class="team-member">
-                    <div class="avatar"><img src="t.jpg" alt="Anwer Tobbeche"></div>
-                    <div class="name">Anwer Tobbeche</div>
-                </div>
-
-                <div class="team-member">
-                    <div class="avatar"><img src="https://ui-avatars.com/api/?name=Asmaa+Zidane&background=007aff&color=fff&size=100&font-size=0.5" alt="Asmaa Zidane"></div>
-                    <div class="name">Asmaa Zidane</div>
-                </div>
+        <div class="supervisors">
+            <div class="team-member supervisor">
+                <div class="avatar"><img src="g.jpg" alt="Prof. Slimane Kerrouchi"></div>
+                <div class="name">Prof. Slimane Kerrouchi</div>
+                <div class="role">Supervisor</div>
             </div>
-
-            <div class="supervisors">
-                <div class="team-member supervisor">
-                    <div class="avatar"><img src="https://ui-avatars.com/api/?name=Slimane+Kerrouchi&background=555&color=fff&size=100&font-size=0.45" alt="Prof. Slimane Kerrouchi"></div>
-                    <div class="name">Prof. Slimane Kerrouchi</div>
-                    <div class="role">Supervisor</div>
-                </div>
-
-                <div class="team-member supervisor">
-                    <div class="avatar"><img src="https://ui-avatars.com/api/?name=Tarek+Cherifi&background=555&color=fff&size=100&font-size=0.45" alt="Prof. Tarek Cherifi"></div>
-                    <div class="name">Prof. Tarek Cherifi</div>
-                    <div class="role">Co‑Supervisor</div>
+            <div class="team-member supervisor">
+                <div class="avatar"><img src="k.png" alt="Prof. Tarek Cherifi"></div>
+                <div class="name">Prof. Tarek Cherifi</div>
+                <div class="role">Supervisor</div>
+            </div>
+        </div>
+        <!-- full team photo — EXTRA BIG & WIDE -->
+        <div style="margin-top: 30px; text-align: center;">
+            <div class="team-photo-row">
+                <div class="timeline-photo" data-src="r.jpg">
+                    <img src="r.jpg" alt="Full Team Photo">
+                    <div class="photo-caption">📸 Full Team – AESE</div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- ─── OUR JOURNEY ─── -->
-    <section id="journey" style="background: #f5f5f7;">
-        <div class="container">
-            <h2 class="section-title">Our Journey</h2>
-            <p class="section-sub">Every step we took – from the first meeting to our current phase</p>
+<!-- ─── OUR JOURNEY ─── -->
+<section id="journey" style="background: #f5f5f7;">
+    <div class="container">
+        <h2 class="section-title">Our Journey</h2>
+        <p class="section-sub">Every step we took – from the first meeting to our current phase</p>
 
-            <!-- Meeting 1 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">01</div>
-                <div class="timeline-content">
-                    <span class="badge">Kick‑off</span>
-                    <h3>Meeting with ICT-Seagulls Project Organizer</h3>
-                    <div class="date">January 27, 2026</div>
-                    <p><strong>Topics discussed:</strong></p>
-                    <ul>
-                        <li>Core objective: Innovative and ethical use of AI technologies.</li>
-                        <li>Core values of ICT-Seagulls: Innovation and process Quality Improvement.</li>
-                        <li>Project execution stages based on the PDSA methodology.</li>
-                        <li>Using fishbone tool to identify root causes.</li>
-                        <li>Project tracking tool: Gantt Chart.</li>
-                        <li>Guidelines for the final presentation.</li>
-                    </ul>
-                    <p>The organizer promised continual supervision and encouraged us to seek out international friends (e‑Pals).</p>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Meeting+with+ICT+Organizer" alt="Meeting with ICT Organizer">
-                </div>
+        <!-- 01: Meeting with Organizer -->
+        <div class="timeline-item">
+            <div class="timeline-icon">01</div>
+            <div class="timeline-content">
+                <span class="badge">Kick‑off</span>
+                <h3>Meeting with ICT-Seagulls Project Organizer</h3>
+                <div class="date">January 27, 2026 · Prof. Dr. Hayat Köksal (Hayal Köksal)</div>
+                <p><strong>Topics discussed:</strong></p>
+                <ul>
+                    <li>Core objective: Innovative and ethical use of AI technologies.</li>
+                    <li>Core values of ICT-Seagulls: Innovation and process Quality Improvement.</li>
+                    <li>Project execution stages based on the <strong>PDCA</strong> (Plan-Do-Check-Act) methodology.</li>
+                    <li>Using fishbone tool to identify root causes.</li>
+                    <li>Project tracking tool: Gantt Chart.</li>
+                    <li>Guidelines for the final presentation.</li>
+                </ul>
+                <p>The organizer promised continual supervision and encouraged us to seek out international friends (e‑Pals).</p>
             </div>
-
-            <!-- Meeting 2 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">02</div>
-                <div class="timeline-content">
-                    <span class="badge">Supervisor Meeting</span>
-                    <h3>Methodology for Literature Search</h3>
-                    <div class="date">February 19, 2026 · With Mr. Kerrouchi &amp; Mr. Tarek</div>
-                    <p><strong>Main steps discussed:</strong></p>
-                    <ul>
-                        <li><strong>Brainstorming</strong> to identify the Problem and research theme.</li>
-                        <li><strong>Extract keywords</strong> from the thematic for search engines.</li>
-                        <li><strong>Filter papers</strong> by citations, credibility, and date.</li>
-                        <li><strong>Read title, abstract, and conclusion</strong> to determine relevance.</li>
-                    </ul>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Literature+Search+Meeting" alt="Literature Search Meeting">
-                </div>
-            </div>
-
-            <!-- Meeting 3 – REWRITTEN (concise) -->
-            <div class="timeline-item">
-                <div class="timeline-icon">03</div>
-                <div class="timeline-content">
-                    <span class="badge">Team Meeting</span>
-                    <h3>Identifying Problems and Solutions</h3>
-                    <div class="date">February 22, 2026</div>
-                    <p><strong>Problem 1:</strong> Limited access to existing equipment.</p>
-                    <p><strong>Solution 1:</strong> Develop a remote access system to allow multiple students to control experiments online.</p>
-                    <p><strong>Problem 2:</strong> Complete absence of physical equipment.</p>
-                    <p><strong>Solution 2:</strong> Create a fully virtual simulation with 3D visualization and real-time data graphing.</p>
-                    <p>Both solutions will be integrated into a flexible platform that adapts to the resources of each institution.</p>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Problem+Solving+Session" alt="Problem Solving Session">
-                </div>
-            </div>
-
-            <!-- Meeting 4 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">04</div>
-                <div class="timeline-content">
-                    <span class="badge">Supervisor Meeting</span>
-                    <h3>Conclusion of Article Reading Phase</h3>
-                    <div class="date">March 28, 2026 · With Mr. Kerrouchi &amp; Mr. Tarek</div>
-                    <p>This meeting marked the conclusion of the article reading phase. We presented our summaries and discussed how each article contributed to our understanding of the problem and potential solutions.</p>
-                    <p><strong>Key takeaways from the literature:</strong></p>
-                    <ul>
-                        <li>Low-cost ESP32-based platforms are feasible for physics education.</li>
-                        <li>Remote and virtual labs can increase accessibility and reduce costs.</li>
-                        <li>Open-source sensor systems provide a solid foundation for building our own solution.</li>
-                    </ul>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Article+Reading+Conclusion" alt="Article Reading Conclusion">
-                </div>
-            </div>
-
-            <!-- Meeting 5 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">05</div>
-                <div class="timeline-content">
-                    <span class="badge">Literature Review</span>
-                    <h3>Scientific Foundations – Three Key Articles</h3>
-                    <div class="date">March 2026</div>
-                    <p><strong>01.</strong> <em>Development of an Educational Low‑Cost and ESP32‑Based Platform for Fundamental Physics</em><br />
-                    <strong>ENSTA, Algeria</strong> – Implementation of a low‑cost modular and open‑source didactic platform using an ESP32 board, designed for physics experiments in engineering training.</p>
-                    <p><strong>02.</strong> <em>Low‑Cost Virtual Physics Lab for Moroccan Universities</em><br />
-                    <strong>EXPRES Project (2016–2018), Morocco</strong> – A low‑cost physics experiment simulation platform based on JavaScript, integrated into an interactive learning management system.</p>
-                    <p><strong>03.</strong> <em>Open‑source Sensors System for Simple Physics Experiments</em><br />
-                    <strong>Universidad de Valladolid, Spain</strong> – Design and construction of a low‑cost platform combining different sensors for simple physics experiments. This article proposes a solution that is closest to ours.</p>
-                    <p>These articles formed the foundation of our project and guided our choice of technology and approach.</p>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Scientific+Foundations" alt="Scientific Foundations">
-                </div>
-            </div>
-
-            <!-- Meeting 6 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">06</div>
-                <div class="timeline-content">
-                    <span class="badge">Team Meeting</span>
-                    <h3>Choosing the First Experiment – Rheographic Tank</h3>
-                    <div class="date">avril 25, 2026</div>
-                    <p>The team evaluated several potential physics experiments for the prototype. After discussion, we selected the <strong>Rheographic Tank</strong> experiment.</p>
-                    <p>This experiment involves mapping electric fields between charged electrodes in a conductive medium. We chose it because it allows students to visualize abstract concepts like equipotential lines and electric field vectors, directly addressing the "Difficulty Understanding" problem identified earlier. This choice also leverages the team's skills in 3D simulation and sensor data acquisition.</p>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Rheographic+Tank+Experiment+Selection" alt="Rheographic Tank Selection">
-                </div>
-            </div>
-
-            <!-- Meeting 7 -->
-            <div class="timeline-item">
-                <div class="timeline-icon">07</div>
-                <div class="timeline-content">
-                    <span class="badge">Implementation Planning</span>
-                    <h3>Planning the Rheographic Experiment Implementation</h3>
-                    <div class="date">May 5, 2026</div>
-                    <p>Following the selection of the rheographic tank, we held a dedicated meeting to define how we will build and automate this experiment. The team outlined the following technical approach:</p>
-                    <ul>
-                        <li><strong>Hardware Design:</strong> Build a small acrylic tank with two parallel metal plates serving as electrodes.</li>
-                        <li><strong>Measurement System:</strong> Use a movable probe connected to an ADS1115 ADC to measure voltage at different points in the water.</li>
-                        <li><strong>Actuation:</strong> Implement a stepper motor system to precisely position the probe across the tank.</li>
-                        <li><strong>Control & Acquisition:</strong> Use an ESP32 to control the stepper motors, read the ADC, and manage the data flow.</li>
-                        <li><strong>Visualization:</strong> Develop a 3D simulation using Three.js to display equipotential lines and the electric field in real-time.</li>
-                        <li><strong>Data Pipeline:</strong> Transmit measurements via MQTT to ThingsBoard for storage, visualization, and further analysis.</li>
-                    </ul>
-                    <p>This plan provides a clear roadmap for moving from the design phase to the implementation phase, combining hardware, firmware, and software development.</p>
-                </div>
-                <div class="timeline-photo">
-                    <img src="https://placehold.co/400x300/e5e5e7/8e8e93?text=Rheographic+Implementation+Planning" alt="Rheographic Implementation Planning">
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- ─── PROJECT LINKS ─── -->
-    <section id="projects" class="project-links">
-        <div class="container">
-            <h2 class="section-title">3D Work</h2>
-            <p class="section-sub">Explore our 3D simulation and 3D design projects</p>
-
-            <div class="project-cards">
-                <a href="https://anwer223.github.io/aese/" target="_blank" class="project-card">
-                    <div class="thumb">
-                        <img src="a.png" alt="3D Simulation">
-                    </div>
-                    <h3>3D Simulation</h3>
-                    <p>Real‑time interactive simulation of the rheographic tank experiment built with Three.js.</p>
-                    <span class="link-icon">View Project →</span>
-                </a>
-
-                <a href="https://enstsa5.autodesk360.com/g/shares/SH90d2dQT28d5b602811e33b744a67b75c71" target="_blank" class="project-card">
-                    <div class="thumb">
-                        <img src="b.png" alt="3D Design">
-                    </div>
-                    <h3>3D Design</h3>
-                    <p>Mechanical design of the experiment hardware – tank, carriage, and probe system.</p>
-                    <span class="link-icon">View Project →</span>
-                </a>
+            <div class="timeline-photo" data-src="l.jpg">
+                <img src="l.jpg" alt="Prof. Dr. Hayat Köksal" onerror="this.src='https://ui-avatars.com/api/?name=Hayat+Köksal&background=007aff&color=fff&size=200';">
+                <div class="photo-caption">👩‍🏫 Prof. Dr. Hayat Köksal</div>
             </div>
         </div>
-    </section>
 
-    <!-- ─── FOOTER ─── -->
-    <footer class="footer">
-        <div class="container">
-            <div class="logo-small">Autonomous Remote <span>Experiments</span></div>
+        <!-- 02: Supervisor Meeting -->
+        <div class="timeline-item">
+            <div class="timeline-icon">02</div>
+            <div class="timeline-content">
+                <span class="badge">Supervisor Meeting</span>
+                <h3>Methodology for Literature Search</h3>
+                <div class="date">February 19, 2026 · With Mr. Kerrouchi &amp; Mr. Tarek</div>
+                <p><strong>Main steps discussed:</strong></p>
+                <ul>
+                    <li><strong>Brainstorming</strong> to identify the Problem and research theme.</li>
+                    <li><strong>Extract keywords</strong> from the thematic for search engines.</li>
+                    <li><strong>Filter papers</strong> by citations, credibility, and date.</li>
+                    <li><strong>Read title, abstract, and conclusion</strong> to determine relevance.</li>
+                </ul>
+            </div>
+            <div class="timeline-photo" data-src="y.JPG">
+                <img src="y.JPG" alt="Meeting Session">
+                <div class="photo-caption">📋 Supervisor discussion</div>
+            </div>
         </div>
-    </footer>
+
+        <!-- 03: Team Meeting + Fishbone -->
+        <div class="timeline-item">
+            <div class="timeline-icon">03</div>
+            <div class="timeline-content">
+                <span class="badge">Team Meeting</span>
+                <h3>Identifying Problems and Solutions – Fishbone Analysis</h3>
+                <div class="date">February 22, 2026</div>
+                <p><strong>Problem 1:</strong> Limited access to existing equipment.</p>
+                <p><strong>Solution 1:</strong> Develop a remote access system to allow multiple students to control experiments online.</p>
+                <p><strong>Problem 2:</strong> Complete absence of physical equipment.</p>
+                <p><strong>Solution 2:</strong> Create a fully virtual simulation with 3D visualization and real-time data graphing.</p>
+                <p>Both solutions will be integrated into a flexible platform that adapts to the resources of each institution.</p>
+                <p style="margin-top:8px;"><strong>Fishbone diagram</strong> – root cause analysis of the identified problems.</p>
+            </div>
+            <div class="timeline-photo" data-src="u.png">
+                <img src="u.png" alt="Fishbone Diagram">
+                <div class="photo-caption">🐟 Fishbone Diagram – Root Cause Analysis</div>
+            </div>
+        </div>
+
+        <!-- 04: Supervisor Meeting (no photo) -->
+        <div class="timeline-item">
+            <div class="timeline-icon">04</div>
+            <div class="timeline-content">
+                <span class="badge">Supervisor Meeting</span>
+                <h3>Conclusion of Article Reading Phase</h3>
+                <div class="date">March 28, 2026 · With Mr. Kerrouchi &amp; Mr. Tarek</div>
+                <p>This meeting marked the conclusion of the article reading phase. We presented our summaries and discussed how each article contributed to our understanding of the problem and potential solutions.</p>
+                <p><strong>Key takeaways from the literature:</strong></p>
+                <ul>
+                    <li>Low-cost ESP32-based platforms are feasible for physics education.</li>
+                    <li>Remote and virtual labs can increase accessibility and reduce costs.</li>
+                    <li>Open-source sensor systems provide a solid foundation for building our own solution.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 05: Literature Review (no photo) -->
+        <div class="timeline-item">
+            <div class="timeline-icon">05</div>
+            <div class="timeline-content">
+                <span class="badge">Literature Review</span>
+                <h3>Scientific Foundations</h3>
+                <div class="date">April 2026</div>
+                <p><strong>01.</strong> <em>Development of an Educational Low‑Cost and ESP32‑Based Platform for Fundamental Physics</em><br /><strong>ENSTA, Algeria</strong> – Implementation of a low‑cost modular and open‑source didactic platform using an ESP32 board, designed for physics experiments in engineering training.</p>
+                <p><strong>02.</strong> <em>Low‑Cost Virtual Physics Lab for Moroccan Universities</em><br /><strong>EXPRES Project (2016–2018), Morocco</strong> – A low‑cost physics experiment simulation platform based on JavaScript, integrated into an interactive learning management system.</p>
+                <p><strong>03.</strong> <em>Open‑source Sensors System for Simple Physics Experiments</em><br /><strong>Universidad de Valladolid, Spain</strong> – Design and construction of a low‑cost platform combining different sensors for simple physics experiments. This article proposes a solution that is closest to ours.</p>
+                <p>These articles formed the foundation of our project and guided our choice of technology and approach.</p>
+            </div>
+        </div>
+
+        <!-- 06: Choosing the Experiments – Rheographic Tank & Inclined Plane (with photo of Inclined Plane design) -->
+        <div class="timeline-item">
+            <div class="timeline-icon">06</div>
+            <div class="timeline-content">
+                <span class="badge">Experiment Selection</span>
+                <h3>Choosing the Experiments</h3>
+                <div class="date">April 2026</div>
+                <p>The team evaluated several potential physics experiments for the prototype. After discussion, we selected two complementary experiments:</p>
+                <p><strong>1. Rheographic Tank</strong> – mapping electric fields between charged electrodes in a conductive medium. Allows students to visualize abstract concepts like equipotential lines and electric field vectors. This experiment leverages the team's skills in 3D simulation and sensor data acquisition.</p>
+                <p><strong>2. Inclined Plane (Pilot)</strong> – using smartphones as sensors (high-speed camera, inclinometer, audio trigger) to study motion and acceleration. This experiment demonstrates the power of using everyday devices for physics education.</p>
+                <p>Both experiments align with our goal of creating an accessible, remote, and interactive learning platform.</p>
+            </div>
+            <!-- Inclined Plane design photo -->
+            <div class="timeline-photo" data-src="e.png" style="flex: 0 0 340px; max-width: 440px;">
+                <img src="e.png" alt="Inclined Plane System Design">
+                <div class="photo-caption">📱 Inclined Plane – SmartPhysics Lab Design</div>
+            </div>
+        </div>
+
+        <!-- 07: Implementation Planning (no photo) -->
+        <div class="timeline-item">
+            <div class="timeline-icon">07</div>
+            <div class="timeline-content">
+                <span class="badge">Implementation Planning</span>
+                <h3>Planning the Implementation</h3>
+                <div class="date">May, 2026</div>
+                <p>Following the design phase, we held a dedicated meeting to define how we will build and automate the experiments. The team outlined the following technical approach:</p>
+                <ul>
+                    <li><strong>Rheographic Tank:</strong> Acrylic tank with electrodes, movable probe, stepper motor system, ESP32 control, and Three.js simulation.</li>
+                    <li><strong>Inclined Plane:</strong> Smartphone-based sensors (camera, inclinometer, microphone) with AI-powered data analysis.</li>
+                    <li><strong>Platform:</strong> Remote access, live streaming, and MQTT communication for data transmission.</li>
+                    <li><strong>Integration:</strong> Seamless connection between hardware, simulation, and remote access.</li>
+                </ul>
+                <p>This plan provides a clear roadmap for moving from design to a working prototype.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ─── LIGHTBOX ─── -->
+<div class="lightbox" id="lightbox">
+    <span class="close-btn" id="closeLightbox">&times;</span>
+    <img id="lightboxImg" src="" alt="full size">
+</div>
+
+<!-- ─── PROJECT LINKS ─── -->
+<section id="projects" class="project-links">
+    <div class="container">
+        <h2 class="section-title">3D Work</h2>
+        <p class="section-sub">Explore our 3D simulation and 3D design projects</p>
+        <div class="project-cards">
+            <a href="https://anwer223.github.io/aese/" target="_blank" class="project-card">
+                <div class="thumb"><img src="a.png" alt=" Simulation"></div>
+                <h3>3D Simulation</h3>
+                <p>Real‑time interactive simulation of the rheographic tank experiment built with Three.js.</p>
+                <span class="link-icon">View Project →</span>
+            </a>
+            <a href="https://enstsa5.autodesk360.com/g/shares/SH90d2dQT28d5b602811e33b744a67b75c71" target="_blank" class="project-card">
+                <div class="thumb"><img src="b.png" alt="3D Design"></div>
+                <h3>3D Design</h3>
+                <p>Mechanical design of the experiment hardware – tank, carriage, and probe system.</p>
+                <span class="link-icon">View Project →</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+    <div class="container">
+        <div class="logo-small">Autonomous Remote <span>Experiments</span></div>
+    </div>
+</footer>
+
+<script>
+    (function() {
+        // LIGHTBOX: tap on any .timeline-photo
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightboxImg');
+        const closeBtn = document.getElementById('closeLightbox');
+
+        const photoElements = document.querySelectorAll('.timeline-photo');
+        photoElements.forEach(el => {
+            el.addEventListener('click', function(e) {
+                const img = this.querySelector('img');
+                if (img) {
+                    const src = img.getAttribute('src');
+                    if (src) {
+                        lightboxImg.src = src;
+                        lightbox.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                }
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        closeBtn.addEventListener('click', closeLightbox);
+        lightbox.addEventListener('click', function(e) {
+            if (e.target === this) closeLightbox();
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeLightbox();
+        });
+    })();
+</script>
 
 </body>
 </html>
